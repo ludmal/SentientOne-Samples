@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SentientOne · Python Sample</title>
+  <style>
+    :root { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color-scheme: light dark; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 2rem; max-width: 720px; margin-inline: auto; line-height: 1.5; }
+    textarea, button, pre { width: 100%; font: inherit; }
+    textarea { min-height: 80px; padding: 0.6rem; border-radius: 6px; border: 1px solid #888; resize: vertical; }
+    button { margin-top: 0.75rem; padding: 0.6rem 1rem; border-radius: 6px; border: 0; background: #2b6cb0; color: white; cursor: pointer; }
+    button:disabled { opacity: 0.6; cursor: not-allowed; }
+    pre { margin-top: 1rem; padding: 1rem; border-radius: 6px; background: rgba(127, 127, 127, 0.12); white-space: pre-wrap; word-break: break-word; min-height: 6rem; }
+  </style>
+</head>
+<body>
+  <h1>SentientOne · Python Sample</h1>
+  <p>Click the button to send the message to your agent.</p>
+  <textarea id="message">Hello! Can you introduce yourself?</textarea>
+  <button id="send">Send to agent</button>
+  <pre id="response">Response will appear here.</pre>
+
+  <script>
+    const $msg = document.getElementById("message");
+    const $btn = document.getElementById("send");
+    const $out = document.getElementById("response");
+
+    $btn.addEventListener("click", async () => {
+      $btn.disabled = true;
+      $out.textContent = "";
+      try {
+        const res = await fetch("/api/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: $msg.value })
+        });
+        if (!res.ok || !res.body) {
+          $out.textContent = `Error ${res.status}: ${await res.text()}`;
+          return;
+        }
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        while (true) {
+          const { value, done } = await reader.read();
+          if (done) break;
+          $out.textContent += decoder.decode(value, { stream: true });
+        }
+      } catch (err) {
+        $out.textContent = String(err);
+      } finally {
+        $btn.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
