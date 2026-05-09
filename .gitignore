@@ -1,0 +1,60 @@
+# ---- .NET / Visual Studio ----
+bin/
+obj/
+out/
+[Dd]ebug/
+[Rr]elease/
+[Bb]uild/
+[Pp]ublish/
+*.user
+*.suo
+*.userprefs
+*.pidb
+*.svclog
+*.log
+*.cache
+*.tmp
+*.swp
+*.bak
+
+# Build / packaging
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Test / coverage
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+
+# Rider / VS / VS Code
+.idea/
+.vs/
+.vscode/
+*.iml
+
+# JetBrains user-specific
+*.DotSettings.user
+
+# Tooling
+.tools/
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets / local config
+*.pfx
+*.key
+secrets.json
+appsettings.*.local.json
+.env
+.env.*
+!.env.example
